@@ -14,7 +14,135 @@ payload = json.dumps({
         "nginx",
         "-g",
         "daemon off;"
-    ]
+    ],
+    "Domainname": "",
+    "Entrypoint": "/docker-entrypoint.sh",
+    "Env": [
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "TERM=xterm",
+        "container=podman",
+        "DYNPKG_RELEASE=2~bookworm",
+        "NGINX_VERSION=1.27.1",
+        "NJS_VERSION=0.8.5",
+        "NJS_RELEASE=1~bookworm",
+        "PKG_RELEASE=1~bookworm",
+        "HOME=/root",
+        "HOSTNAME=4d6afbcf669e"
+    ],
+    "Healthcheck": {
+        "Status": "",
+        "FailingStreak": 0,
+        "Log": None
+    },
+    "HostConfig": {
+        "Binds": [],
+        "CgroupManager": "systemd",
+        "CgroupMode": "private",
+        "ContainerIDFile": "",
+        "LogConfig": {
+            "Type": "journald",
+            "Config": None,
+            "Path": "",
+            "Tag": "",
+            "Size": "0B"
+        },
+        "NetworkMode": "slirp4netns",
+        "PortBindings": {
+            "80/tcp": [
+                {
+                    "HostIp": "",
+                    "HostPort": "8081"
+                }
+            ]
+        },
+        "RestartPolicy": {
+            "Name": "",
+            "MaximumRetryCount": 0
+        },
+        "AutoRemove": False,
+        "VolumeDriver": "",
+        "VolumesFrom": None,
+        "CapAdd": [],
+        "CapDrop": [
+            "CAP_AUDIT_WRITE",
+            "CAP_MKNOD",
+            "CAP_NET_RAW"
+        ],
+        "Dns": [],
+        "DnsOptions": [],
+        "DnsSearch": [],
+        "ExtraHosts": [],
+        "GroupAdd": [],
+        "IpcMode": "private",
+        "Cgroup": "",
+        "Cgroups": "default",
+        "Links": None,
+        "OomScoreAdj": 0,
+        "PidMode": "private",
+        "Privileged": False,
+        "PublishAllPorts": False,
+        "ReadonlyRootfs": False,
+        "SecurityOpt": [],
+        "Tmpfs": {},
+        "UTSMode": "private",
+        "UsernsMode": "",
+        "ShmSize": 65536000,
+        "Runtime": "oci",
+        "ConsoleSize": [
+            0,
+            0
+        ],
+        "Isolation": "",
+        "CpuShares": 0,
+        "Memory": 0,
+        "NanoCpus": 0,
+        "CgroupParent": "user.slice",
+        "BlkioWeight": 0,
+        "BlkioWeightDevice": None,
+        "BlkioDeviceReadBps": None,
+        "BlkioDeviceWriteBps": None,
+        "BlkioDeviceReadIOps": None,
+        "BlkioDeviceWriteIOps": None,
+        "CpuPeriod": 0,
+        "CpuQuota": 0,
+        "CpuRealtimePeriod": 0,
+        "CpuRealtimeRuntime": 0,
+        "CpusetCpus": "",
+        "CpusetMems": "",
+        "Devices": [],
+        "DiskQuota": 0,
+        "KernelMemory": 0,
+        "MemoryReservation": 0,
+        "MemorySwap": 0,
+        "MemorySwappiness": 0,
+        "OomKillDisable": False,
+        "PidsLimit": 2048,
+        "Ulimits": [],
+        "CpuCount": 0,
+        "CpuPercent": 0,
+        "IOMaximumIOps": 0,
+        "IOMaximumBandwidth": 0,
+        "CgroupConf": None
+    },
+    "Hostname": "<string>",
+    "Image": "docker.io/library/nginx:1.24.0",
+    "Labels": {
+        "maintainer": "NGINX Docker Maintainers <docker-maint@nginx.com>"
+    },
+    "MacAddress": "",
+    "Name": "<string>",
+    "OnBuild": [
+        "<string>",
+        "<string>"
+    ],
+    "OpenStdin": False,
+    "StdinOnce": False,
+    "StopSignal": "3",
+    "StopTimeout": 10,
+    "Tty": False,
+    "User": "",
+    "Volumes": None,
+    "WorkingDir": "/"
 })
 
 # Set the request headers indicating content type and expected response format
