@@ -1,8 +1,8 @@
 import requests  # Import the requests library for making HTTP requests
 import json      # Import the json library for handling JSON data
 
-# Define the URL for the API endpoint to create a container named 'nginx-sample'
-url = "http://localhost:10001/containers/create?name=nginx-sample"
+# Define the URL for the API endpoint to create a container named 'application-nginx-1.24.0'
+url = "http://localhost:10001/containers/create?name=application-nginx-1.24.0"
 
 # Prepare the payload as a JSON string representing the container configuration
 payload = json.dumps({
