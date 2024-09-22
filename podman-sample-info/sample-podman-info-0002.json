@@ -1,0 +1,17 @@
+[
+    {
+        "Id": "4d6afbcf669e6342da8864190234ace265dabc5d48cf57c19823fa0072f7cc92",
+        "Created": "2024-09-20T09:15:54.237931385Z",
+        "Path": "/docker-entrypoint.sh",
+        "Args": [
+            "nginx",
+            "-g",
+            "daemon off;"
+        ],
+        "Image": "docker.io/library/nginx:1.27.0",
+        "ImageName": "docker.io/library/nginx:1.27.0",
+        "Rootfs": "",
+        "Pod": ""
+
+    }
+]
