@@ -118,42 +118,33 @@ def stop_container(url, container_name, timeout=15):
         print("Response is not valid JSON:", response.text) 
 
 
-def start_container(container_name):
+def start_container(url, container_name):
     """Start a specified container and print the response."""
     
     ## Print Stage / Function
     print(" ")
     print(f"Stage : Starting Container  ... ")
     print_line_separator()
-    print("LOG : Starting Container",container_name, " ... ")
     print(f"LOG : Starting Container {container_name} .. ")
 
-    # Define the URL for the API endpoint to start the specified container
-    url = f"http://localhost:10001/containers/{container_name}/start"
+    url = f"{url}/containers/{container_name}/start"
 
-    # Payload is empty because the request does not need any body content
     payload = {}
-
-    # Set the headers for the request
     headers = {
-        'Accept': 'application/json'  # Indicate that we expect a JSON response
+        'Accept': 'application/json'  
     }
 
-    # Send a POST request to the specified URL with the given headers and payload
     response = requests.post(url, headers=headers, data=payload)
 
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
 
-    # Print the response text which will contain information about the result of the start request
-    # print(response.text)
-
-    # Print the response text which will contain information about the result of the start request
     try:
-        response_data = response.json()             # Parse the response as JSON
-        print(json.dumps(response_data, indent=4))  # Print formatted JSON with an indentation of 4 spaces
+        # Parse the response as JSON
+        response_data = response.json()             
+        print(json.dumps(response_data, indent=4))  
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
+        print("Response is not valid JSON:", response.text) 
 
 
 def delete_container(container_name, force=False, v=False):
