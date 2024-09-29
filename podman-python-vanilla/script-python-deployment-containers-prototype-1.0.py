@@ -10,7 +10,7 @@ def print_line_separator():
     print('=' * terminal_width)
 
 
-def get_list_container(url):
+def get_list_container(url_base):
     """Fetch container information from the specified URL and print filtered data."""
     
     ## Print Stage / Function
@@ -18,7 +18,7 @@ def get_list_container(url):
     print("Stage : Listing All Containers ...")
     print_line_separator()
 
-    url = f"{url}/containers/json?all=true&external=false&size=false"
+    url = f"{url_base}/containers/json?all=true&external=false&size=false"
 
     payload = {}
     headers = {
@@ -26,7 +26,7 @@ def get_list_container(url):
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
-    print(f"Response Status Code: {response.status_code}")
+    print(f"LOG : Response Status Code: {response.status_code}")
     print(" ")
 
     try:
@@ -47,10 +47,10 @@ def get_list_container(url):
         print(json.dumps(filtered_data, indent=4))
 
     except ValueError:
-        print("Response is not valid JSON.")
+        print("LOG : Response is not valid JSON.")
 
 
-def get_list_container_image(url):
+def get_list_container_image(url_base):
     """Fetch image information from the specified URL and print filtered data."""
     
     ## Print Stage / Function
@@ -58,7 +58,7 @@ def get_list_container_image(url):
     print("Stage : Listing All Container Images  ...")
     print_line_separator()
 
-    url = f"{url}/images/json?all=false&digests=false"
+    url = f"{url_base}/images/json?all=false&digests=false"
 
     payload = {}
     headers = {
@@ -66,7 +66,7 @@ def get_list_container_image(url):
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
-    print(f"Response Status Code: {response.status_code}")
+    print(f"LOG : Response Status Code: {response.status_code}")
     print(" ")
     
     try:
@@ -87,10 +87,10 @@ def get_list_container_image(url):
         print(json.dumps(filtered_data, indent=4))
 
     except ValueError:
-        print("Response is not valid JSON.")
+        print("LOG : Response is not valid JSON.")
 
 
-def stop_container(url, container_name, timeout=15):
+def stop_container(url_base, container_name, timeout=15):
     """Stop a specified container and print the response."""
     
     ## Print Stage / Function
@@ -99,7 +99,7 @@ def stop_container(url, container_name, timeout=15):
     print_line_separator()
     print(f"LOG : Stopping Container {container_name} ... ")
 
-    url = f"{url}/containers/{container_name}/stop?t={timeout}"
+    url = f"{url_base}/containers/{container_name}/stop?t={timeout}"
 
     payload = {}
     headers = {
@@ -107,7 +107,7 @@ def stop_container(url, container_name, timeout=15):
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
-    print(f"Response Status Code: {response.status_code}")
+    print(f"LOG : Response Status Code: {response.status_code}")
     print(" ")
 
     try:
@@ -115,10 +115,10 @@ def stop_container(url, container_name, timeout=15):
         response_data = response.json()             
         print(json.dumps(response_data, indent=4)) 
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text) 
+        print("LOG : Response is not valid JSON:", response.text) 
 
 
-def start_container(url, container_name):
+def start_container(url_base, container_name):
     """Start a specified container and print the response."""
     
     ## Print Stage / Function
@@ -127,7 +127,7 @@ def start_container(url, container_name):
     print_line_separator()
     print(f"LOG : Starting Container {container_name} ... ")
 
-    url = f"{url}/containers/{container_name}/start"
+    url = f"{url_base}/containers/{container_name}/start"
 
     payload = {}
     headers = {
@@ -136,7 +136,7 @@ def start_container(url, container_name):
 
     response = requests.post(url, headers=headers, data=payload)
 
-    print(f"Response Status Code: {response.status_code}")
+    print(f"LOG : Response Status Code: {response.status_code}")
     print(" ")
 
     try:
@@ -144,10 +144,10 @@ def start_container(url, container_name):
         response_data = response.json()             
         print(json.dumps(response_data, indent=4))  
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text) 
+        print("LOG : Response is not valid JSON:", response.text) 
 
 
-def delete_container(url, container_name, force=False, v=False):
+def delete_container(url_base, container_name, force=False, v=False):
     """Delete a specified container using the Docker API."""
 
     ## Print Stage / Function
@@ -156,7 +156,7 @@ def delete_container(url, container_name, force=False, v=False):
     print_line_separator()
     print(f"LOG : Deleting Container {container_name} ... ")
 
-    url = f"{url}/containers/{container_name}?force={str(force).lower()}&v={str(v).lower()}"
+    url = f"{url_base}/containers/{container_name}?force={str(force).lower()}&v={str(v).lower()}"
 
     payload = {}
     headers = {
@@ -164,7 +164,7 @@ def delete_container(url, container_name, force=False, v=False):
     }
 
     response = requests.delete(url, headers=headers, data=payload)
-    print(f"Response Status Code: {response.status_code}")
+    print(f"LOG : Response Status Code: {response.status_code}")
     print(" ")
 
     try:
@@ -172,10 +172,10 @@ def delete_container(url, container_name, force=False, v=False):
         response_data = response.json()             
         print(json.dumps(response_data, indent=4))  
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text) 
+        print("LOG : Response is not valid JSON:", response.text) 
 
 
-def delete_container_image(url, image_name, force=False, noprune=False):
+def delete_container_image(url_base, image_name, force=False, noprune=False):
     """Delete a specified Docker image and print the response."""
     
     ## Print Stage / Function
@@ -184,7 +184,7 @@ def delete_container_image(url, image_name, force=False, noprune=False):
     print_line_separator()
     print(f"LOG : Deleting Container Image {image_name} ... ")
 
-    url = f"{url}/images/docker.io/library/{image_name}?force={str(force).lower()}&noprune={str(noprune).lower()}"
+    url = f"{url_base}/images/docker.io/library/{image_name}?force={str(force).lower()}&noprune={str(noprune).lower()}"
 
     payload = {}
     headers = {
@@ -192,7 +192,7 @@ def delete_container_image(url, image_name, force=False, noprune=False):
     }
 
     response = requests.request("DELETE", url, headers=headers, data=payload)
-    print(f"Response Status Code: {response.status_code}")
+    print(f"LOG : Response Status Code: {response.status_code}")
     print(" ")
 
     try:
@@ -201,11 +201,11 @@ def delete_container_image(url, image_name, force=False, noprune=False):
         pretty_json = json.dumps(data, indent=4)
         print(pretty_json)
     except ValueError:
-        print("Response is not in JSON format:")
+        print("LOG : Response is not in JSON format:")
         print(response.text)
 
 
-def pull_container_image(url, image_reference):
+def pull_container_image(url_base, image_reference):
     """Pull a specified image from a container registry and print the response."""
     
     ## Print Stage / Function
@@ -214,7 +214,7 @@ def pull_container_image(url, image_reference):
     print_line_separator()
     print(f"LOG : Pulling Container Image {image_reference} ... ")
 
-    url = f"{url}/v4.0.0/libpod/images/pull?reference={image_reference}"
+    url = f"{url_base}/v4.0.0/libpod/images/pull?reference={image_reference}"
 
     payload = "<file contents here>"
     headers = {
@@ -224,7 +224,7 @@ def pull_container_image(url, image_reference):
 
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    print(f"Response Status Code: {response.status_code}")
+    print(f"LOG : Response Status Code: {response.status_code}")
     print(" ")
 
     try:
@@ -232,10 +232,10 @@ def pull_container_image(url, image_reference):
         response_data = response.json()             
         print(json.dumps(response_data, indent=4))  
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text)  
+        print("LOG : Response is not valid JSON:", response.text)  
 
 
-def create_container(url, container_name, payload):
+def create_container(url_base, container_name, payload):
     """ Create a container using the specified container name and payload. """
 
     ## Print Stage / Function
@@ -244,7 +244,7 @@ def create_container(url, container_name, payload):
     print_line_separator()
     print(f"LOG : Creating Container {container_name} ... ")
 
-    url = f"{url}/containers/create?name={container_name}"
+    url = f"{url_base}/containers/create?name={container_name}"
 
     payload_json = json.dumps(payload)
     headers = {
@@ -254,7 +254,7 @@ def create_container(url, container_name, payload):
 
     response = requests.post(url, headers=headers, data=payload_json)
 
-    print("Response Code:", response.status_code)
+    print("LOG : Response Code:", response.status_code)
     print(" ")
 
     try:
@@ -262,7 +262,7 @@ def create_container(url, container_name, payload):
         response_data = response.json()             
         print(json.dumps(response_data, indent=4))  
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text)  
+        print("LOG : Response is not valid JSON:", response.text)  
 
 
 # Main Function usage
@@ -277,12 +277,14 @@ if __name__ == "__main__":
     # # Define the URL for the API endpoint For Container Images
     # url_container_image = "http://localhost:10001/images/json?all=false&digests=false"
 
-    # Define & Prepare the payload as a dictionary representing the container configuration
-    # 1. Replace Image ID with image name with version ( EX : "Image" : "docker.io/library/nginx:1.24.0",) otherwise it may cause not found error 
-    # 2. Comment the "State" subsection since the container hasn't run yet (No state)
-    # 3. Replace true with True
-    # 4. Replace false with False
-    # 5. Replace null with None
+    """
+    Define & Prepare the payload as a dictionary representing the container configuration
+    1. Replace Image ID with image name with version ( EX : "Image" : "docker.io/library/nginx:1.24.0",) otherwise it may cause not found error 
+    2. Comment the "State" subsection since the container hasn't run yet (No state)
+    3. Replace true with True
+    4. Replace false with False
+    5. Replace null with None
+    """
 
     payload = {
             "Id": "4d6afbcf669e6342da8864190234ace265dabc5d48cf57c19823fa0072f7cc92",
