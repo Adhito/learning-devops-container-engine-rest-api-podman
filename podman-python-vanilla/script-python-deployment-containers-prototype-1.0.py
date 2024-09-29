@@ -18,25 +18,19 @@ def get_list_container(url):
     print("Stage : Listing All Containers ...")
     print_line_separator()
 
-    # Define an empty payload (not used in this GET request)
-    payload = {}
+    url = f"{url}/containers/json?all=true&external=false&size=false"
 
-    # Define the headers to include in the request
+    payload = {}
     headers = {
-        'Accept': 'application/json'  # Indicate that we expect a JSON response
+        'Accept': 'application/json'  
     }
 
-    # Make the GET request to the specified URL with headers and payload
     response = requests.request("GET", url, headers=headers, data=payload)
-
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
 
-    # Attempt to parse and pretty print the JSON response
     try:
         json_data = response.json()
-        
-        # Create a list to hold the filtered data
         filtered_data = []
         
         # Iterate through each container in the JSON response
@@ -48,13 +42,11 @@ def get_list_container(url):
                 'Image': container.get('Image'),
                 'Ports': container.get('Ports')
             }
-            filtered_data.append(container_info)  # Append to the list
+            filtered_data.append(container_info) 
 
-        # Pretty print the filtered data with an indent of 4 spaces
         print(json.dumps(filtered_data, indent=4))
 
     except ValueError:
-        # Handle the case where the response is not valid JSON
         print("Response is not valid JSON.")
 
 
@@ -357,6 +349,9 @@ def create_container(container_name, payload):
 # Main Function usage
 if __name__ == "__main__":
 
+    # Define the URL for the Podman RESTAPI 
+    url_base = "http://localhost:10001"
+
     # Define the URL for the HTTP request
     url_container = "http://localhost:10001/containers/json?all=true&external=false&size=false"
 
@@ -658,28 +653,28 @@ if __name__ == "__main__":
     }
 
     # Call the function to get and print container information
-    get_list_container(url_container)
+    get_list_container(url_base)
 
-    # Call the function to get and print image information
-    get_list_container_image(url_container_image)
+    # # Call the function to get and print image information
+    # get_list_container_image(url_container_image)
 
-    # Call the function to stop the container named "application-nginx-1.24.0"
-    stop_container("application-nginx-1.24.0", timeout=15)
+    # # Call the function to stop the container named "application-nginx-1.24.0"
+    # stop_container("application-nginx-1.24.0", timeout=15)
 
-    # Call the function to delete the container
-    delete_container("application-nginx-1.24.0")
+    # # Call the function to delete the container
+    # delete_container("application-nginx-1.24.0")
 
-    # Call the function to delete the image "nginx:1.24.0"
-    delete_container_image("nginx:1.24.0", force=False, noprune=False)
+    # # Call the function to delete the image "nginx:1.24.0"
+    # delete_container_image("nginx:1.24.0", force=False, noprune=False)
 
-    # Call the function to pull the image "docker.io/library/nginx:1.24.0"
-    pull_container_image("docker.io/library/nginx:1.24.0")
+    # # Call the function to pull the image "docker.io/library/nginx:1.24.0"
+    # pull_container_image("docker.io/library/nginx:1.24.0")
 
-    # Call the function to create the container
-    create_container("application-nginx-1.24.0", payload)
+    # # Call the function to create the container
+    # create_container("application-nginx-1.24.0", payload)
 
-    # Call the function to start the container named "application-nginx-1.24.0"
-    start_container("application-nginx-1.24.0")
+    # # Call the function to start the container named "application-nginx-1.24.0"
+    # start_container("application-nginx-1.24.0")
 
-    # Call the function to get and print container information
-    get_list_container(url_container)
+    # # Call the function to get and print container information
+    # get_list_container(url_container)
