@@ -90,42 +90,32 @@ def get_list_container_image(url):
         print("Response is not valid JSON.")
 
 
-def stop_container(container_name, timeout=15):
+def stop_container(url, container_name, timeout=15):
     """Stop a specified container and print the response."""
     
     ## Print Stage / Function
     print(" ")
     print(f"Stage : Stopping Container  ... ")
     print_line_separator()
-    print("LOG : Stopping Container ", container_name, " ... ")
     print(f"LOG : Stopping Container {container_name} .. ")
 
-    # Define the URL for the API endpoint to stop the specified container
-    url = f"http://localhost:10001/containers/{container_name}/stop?t={timeout}"
+    url = f"{url}/containers/{container_name}/stop?t={timeout}"
 
-    # Payload is empty because the request does not need any body content
     payload = {}
-
-    # Set the headers for the request
     headers = {
-        'Accept': 'application/json'  # Indicate that we expect a JSON response
+        'Accept': 'application/json'  
     }
 
-    # Send a POST request to the specified URL with the given headers and payload
     response = requests.request("POST", url, headers=headers, data=payload)
-
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
 
-    # Print the response text which will contain information about the result of the stop request
-    # print(response.text)
-
-    # Print the response text which will contain information about the result of the stop request 
     try:
-        response_data = response.json()             # Parse the response as JSON
-        print(json.dumps(response_data, indent=4))  # Print formatted JSON with an indentation of 4 spaces
+        # Parse the response as JSON
+        response_data = response.json()             
+        print(json.dumps(response_data, indent=4)) 
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
+        print("Response is not valid JSON:", response.text) 
 
 
 def start_container(container_name):
@@ -344,14 +334,19 @@ if __name__ == "__main__":
     # Define the URL for the Podman RESTAPI 
     url_base = "http://localhost:10001"
 
-    # Define the URL for the HTTP request
-    url_container = "http://localhost:10001/containers/json?all=true&external=false&size=false"
+    # # Define the URL for the HTTP request
+    # url_container = "http://localhost:10001/containers/json?all=true&external=false&size=false"
 
-    # Define the URL for the API endpoint For Container Images
-    url_container_image = "http://localhost:10001/images/json?all=false&digests=false"
+    # # Define the URL for the API endpoint For Container Images
+    # url_container_image = "http://localhost:10001/images/json?all=false&digests=false"
 
     # Define & Prepare the payload as a dictionary representing the container configuration
     # 1. Replace Image ID with image name with version ( EX : "Image" : "docker.io/library/nginx:1.24.0",) otherwise it may cause not found error 
+    # 2. Comment the "State" subsection since the container hasn't run yet (No state)
+    # 3. Replace true with True
+    # 4. Replace false with False
+    # 5. Replace null with None
+
     payload = {
             "Id": "4d6afbcf669e6342da8864190234ace265dabc5d48cf57c19823fa0072f7cc92",
             "Created": "2024-09-20T09:15:54.237931385Z",
@@ -651,7 +646,7 @@ if __name__ == "__main__":
     get_list_container_image(url_base)
 
     # Call the function to stop the container based on the parameter"
-    stop_container("application-nginx-1.24.0", timeout=15)
+    stop_container(url_base, "application-nginx-1.24.0", timeout=15)
 
     # # Call the function to delete the container
     # delete_container("application-nginx-1.24.0")
