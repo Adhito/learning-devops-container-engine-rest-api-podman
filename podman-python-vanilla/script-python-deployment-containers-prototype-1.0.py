@@ -311,6 +311,49 @@ def pull_container_image(image_reference):
         print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
 
 
+def create_container(container_name, payload):
+    """
+    Create a container using the specified container name and payload.
+
+    Args:
+        container_name (str): The name of the container to create.
+        payload (dict): A dictionary representing the container configuration.
+
+    Returns:
+        None
+    """
+
+    ## Print Stage / Function
+    print(" ")
+    print("Stage : Creating Containers ...")
+    print_line_separator()
+
+    # Define the URL for the API endpoint to create a container
+    url = f"http://localhost:10001/containers/create?name={container_name}"
+
+    # Convert the payload dictionary to a JSON string
+    payload_json = json.dumps(payload)
+
+    # Set headers for the request to specify content type and accepted response type
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+
+    # Make a POST request to the specified URL with the payload and headers
+    response = requests.post(url, headers=headers, data=payload_json)
+
+    # Print the HTTP response status code
+    print("Response Code:", response.status_code)
+
+    # Pretty-print the JSON response
+    try:
+        response_data = response.json()             # Parse the response as JSON
+        print(json.dumps(response_data, indent=4))  # Print formatted JSON with an indentation of 4 spaces
+    except json.JSONDecodeError:
+        print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
+
+
 
 # Main Function usage
 if __name__ == "__main__":
