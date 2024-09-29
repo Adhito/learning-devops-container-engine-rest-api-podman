@@ -585,20 +585,20 @@ if __name__ == "__main__":
     # Call the function to stop the container based on the parameter"
     stop_container(url_base, "application-nginx-1.24.0", timeout=15)
 
-    # # Call the function to delete the container
-    # delete_container("application-nginx-1.24.0")
+    # Call the function to delete the container
+    delete_container(url_base, "application-nginx-1.24.0")
 
-    # # Call the function to delete the image "nginx:1.24.0"
-    # delete_container_image("nginx:1.24.0", force=False, noprune=False)
+    # Call the function to delete the image "nginx:1.24.0"
+    delete_container_image(url_base, "nginx:1.24.0", force=False, noprune=False)
 
-    # # Call the function to pull the image "docker.io/library/nginx:1.24.0"
-    # pull_container_image("docker.io/library/nginx:1.24.0")
+    # Call the function to pull the image "docker.io/library/nginx:1.24.0"
+    pull_container_image(url_base, "docker.io/library/nginx:1.24.0")
 
-    # # Call the function to create the container
-    # create_container("application-nginx-1.24.0", payload)
+    # Call the function to create the container
+    create_container(url_base, "application-nginx-1.24.0", payload)
 
-    # # Call the function to start the container named "application-nginx-1.24.0"
-    # start_container("application-nginx-1.24.0")
+    # Call the function to start the container named "application-nginx-1.24.0"
+    start_container(url_base, "application-nginx-1.24.0")
 
-    # # Call the function to get and print container information
-    # get_list_container(url_container)
+    # Call the function to get and print container information
+    get_list_container(url_base, )
