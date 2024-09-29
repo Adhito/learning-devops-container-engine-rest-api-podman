@@ -18,25 +18,19 @@ def get_list_container(url):
     print("Stage : Listing All Containers ...")
     print_line_separator()
 
-    # Define an empty payload (not used in this GET request)
-    payload = {}
+    url = f"{url}/containers/json?all=true&external=false&size=false"
 
-    # Define the headers to include in the request
+    payload = {}
     headers = {
-        'Accept': 'application/json'  # Indicate that we expect a JSON response
+        'Accept': 'application/json'  
     }
 
-    # Make the GET request to the specified URL with headers and payload
     response = requests.request("GET", url, headers=headers, data=payload)
-
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
 
-    # Attempt to parse and pretty print the JSON response
     try:
         json_data = response.json()
-        
-        # Create a list to hold the filtered data
         filtered_data = []
         
         # Iterate through each container in the JSON response
@@ -48,13 +42,11 @@ def get_list_container(url):
                 'Image': container.get('Image'),
                 'Ports': container.get('Ports')
             }
-            filtered_data.append(container_info)  # Append to the list
+            filtered_data.append(container_info) 
 
-        # Pretty print the filtered data with an indent of 4 spaces
         print(json.dumps(filtered_data, indent=4))
 
     except ValueError:
-        # Handle the case where the response is not valid JSON
         print("Response is not valid JSON.")
 
 
@@ -66,25 +58,19 @@ def get_list_container_image(url):
     print("Stage : Listing All Container Images  ...")
     print_line_separator()
 
-    # Define any payload (data to send with the request); in this case, it's empty
-    payload = {}
+    url = f"{url}/images/json?all=false&digests=false"
 
-    # Set the request headers; we're specifying that we want a JSON response
+    payload = {}
     headers = {
         'Accept': 'application/json'
     }
 
-    # Make a GET request to the specified URL with the given headers and payload
     response = requests.request("GET", url, headers=headers, data=payload)
-
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
     
-    # Attempt to parse and pretty print the JSON response
     try:
         json_data = response.json()
-        
-        # Create a list to hold the filtered data
         filtered_data = []
         
         # Iterate through each container image in the JSON response
@@ -96,275 +82,208 @@ def get_list_container_image(url):
                 'Names': container_image.get('Names'),
                 'Containers': container_image.get('Containers')
             }
-            filtered_data.append(container_image_info)  # Append to the list
+            filtered_data.append(container_image_info) 
 
-        # Pretty print the filtered data with an indent of 4 spaces
         print(json.dumps(filtered_data, indent=4))
 
     except ValueError:
-        # Handle the case where the response is not valid JSON
         print("Response is not valid JSON.")
 
 
-def stop_container(container_name, timeout=15):
+def stop_container(url, container_name, timeout=15):
     """Stop a specified container and print the response."""
     
     ## Print Stage / Function
     print(" ")
     print(f"Stage : Stopping Container  ... ")
     print_line_separator()
-    print("LOG : Stopping Container ", container_name, " ... ")
-    print(f"LOG : Stopping Container {container_name} .. ")
+    print(f"LOG : Stopping Container {container_name} ... ")
 
-    # Define the URL for the API endpoint to stop the specified container
-    url = f"http://localhost:10001/containers/{container_name}/stop?t={timeout}"
+    url = f"{url}/containers/{container_name}/stop?t={timeout}"
 
-    # Payload is empty because the request does not need any body content
     payload = {}
-
-    # Set the headers for the request
     headers = {
-        'Accept': 'application/json'  # Indicate that we expect a JSON response
+        'Accept': 'application/json'  
     }
 
-    # Send a POST request to the specified URL with the given headers and payload
     response = requests.request("POST", url, headers=headers, data=payload)
-
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
 
-    # Print the response text which will contain information about the result of the stop request
-    # print(response.text)
-
-    # Print the response text which will contain information about the result of the stop request 
     try:
-        response_data = response.json()             # Parse the response as JSON
-        print(json.dumps(response_data, indent=4))  # Print formatted JSON with an indentation of 4 spaces
+        # Parse the response as JSON
+        response_data = response.json()             
+        print(json.dumps(response_data, indent=4)) 
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
+        print("Response is not valid JSON:", response.text) 
 
 
-def start_container(container_name):
+def start_container(url, container_name):
     """Start a specified container and print the response."""
     
     ## Print Stage / Function
     print(" ")
     print(f"Stage : Starting Container  ... ")
     print_line_separator()
-    print("LOG : Starting Container",container_name, " ... ")
-    print(f"LOG : Starting Container {container_name} .. ")
+    print(f"LOG : Starting Container {container_name} ... ")
 
-    # Define the URL for the API endpoint to start the specified container
-    url = f"http://localhost:10001/containers/{container_name}/start"
+    url = f"{url}/containers/{container_name}/start"
 
-    # Payload is empty because the request does not need any body content
     payload = {}
-
-    # Set the headers for the request
     headers = {
-        'Accept': 'application/json'  # Indicate that we expect a JSON response
+        'Accept': 'application/json'  
     }
 
-    # Send a POST request to the specified URL with the given headers and payload
     response = requests.post(url, headers=headers, data=payload)
 
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
 
-    # Print the response text which will contain information about the result of the start request
-    # print(response.text)
-
-    # Print the response text which will contain information about the result of the start request
     try:
-        response_data = response.json()             # Parse the response as JSON
-        print(json.dumps(response_data, indent=4))  # Print formatted JSON with an indentation of 4 spaces
+        # Parse the response as JSON
+        response_data = response.json()             
+        print(json.dumps(response_data, indent=4))  
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
+        print("Response is not valid JSON:", response.text) 
 
 
-def delete_container(container_name, force=False, v=False):
-    """
-    Delete a specified container using the Docker API.
+def delete_container(url, container_name, force=False, v=False):
+    """Delete a specified container using the Docker API."""
 
-    Args:
-        container_name (str): The name of the container to delete.
-        force (bool): Whether to force the removal of the container (default is False).
-        v (bool): Whether to remove volumes associated with the container (default is False).
-
-    Returns:
-        None
-    """
     ## Print Stage / Function
     print(" ")
     print("Stage : Deleting Containers ...")
     print_line_separator()
+    print(f"LOG : Deleting Container {container_name} ... ")
 
-    # Define the URL for the API endpoint to delete the specified container
-    url = f"http://localhost:10001/containers/{container_name}?force={str(force).lower()}&v={str(v).lower()}"
+    url = f"{url}/containers/{container_name}?force={str(force).lower()}&v={str(v).lower()}"
 
-    # Payload is empty because the request does not need any body content
     payload = {}
-
-    # Set the headers for the request
     headers = {
-        'Accept': 'application/json'  # Indicate that we expect a JSON response
+        'Accept': 'application/json'
     }
 
-    # Send a DELETE request to the specified URL with the given headers and payload
     response = requests.delete(url, headers=headers, data=payload)
-
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
 
-    # # Print the response text which will contain information about the result of the delete request
-    # try:
-    #     # Parse the JSON response
-    #     data = response.json()
-    #     # Pretty-print the JSON data
-    #     pretty_json = json.dumps(data, indent=4)
-    #     print(pretty_json)
-    # except ValueError:
-    #     # If the response is not JSON, just print the raw text
-    #     print("Response is not in JSON format:")
-    #     print(response.text)
-
-    # Pretty-print the JSON response
     try:
-        response_data = response.json()             # Parse the response as JSON
-        print(json.dumps(response_data, indent=4))  # Print formatted JSON with an indentation of 4 spaces
+        # Parse the response as JSON
+        response_data = response.json()             
+        print(json.dumps(response_data, indent=4))  
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
+        print("Response is not valid JSON:", response.text) 
 
 
-def delete_container_image(image_name, force=False, noprune=False):
+def delete_container_image(url, image_name, force=False, noprune=False):
     """Delete a specified Docker image and print the response."""
     
     ## Print Stage / Function
     print(" ")
     print("Stage : Deleting  Container Images  ...")
     print_line_separator()
+    print(f"LOG : Deleting Container Image {image_name} ... ")
 
-    # Define the URL for the API endpoint to delete the specified image
-    url = f"http://localhost:10001/images/docker.io/library/{image_name}?force={str(force).lower()}&noprune={str(noprune).lower()}"
+    url = f"{url}/images/docker.io/library/{image_name}?force={str(force).lower()}&noprune={str(noprune).lower()}"
 
-    # Payload is empty because the request does not need any body content
     payload = {}
-
-    # Set the headers for the request
     headers = {
-        'Accept': 'application/json'  # Indicate that we expect a JSON response
+        'Accept': 'application/json'  
     }
 
-    # Send a DELETE request to the specified URL with the given headers and payload
     response = requests.request("DELETE", url, headers=headers, data=payload)
-
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
 
-    # Print the response text which will contain information about the result of the delete request
     try:
         # Parse the JSON response
         data = response.json()
-        # Pretty-print the JSON data
         pretty_json = json.dumps(data, indent=4)
         print(pretty_json)
     except ValueError:
-        # If the response is not JSON, just print the raw text
         print("Response is not in JSON format:")
         print(response.text)
 
 
-def pull_container_image(image_reference):
+def pull_container_image(url, image_reference):
     """Pull a specified image from a container registry and print the response."""
     
     ## Print Stage / Function
     print(" ")
     print("Stage : Pulling Container Images ...")
     print_line_separator()
+    print(f"LOG : Pulling Container Image {image_reference} ... ")
 
-    # Define the URL for the API endpoint to pull the specified image
-    url = f"http://localhost:10001/v4.0.0/libpod/images/pull?reference={image_reference}"
+    url = f"{url}/v4.0.0/libpod/images/pull?reference={image_reference}"
 
-    # Define the payload for the request (placeholder; adjust as needed)
     payload = "<file contents here>"
-
-    # Set the request headers
     headers = {
-        'Content-Type': 'text/plain',  # Specify the content type of the request body
-        'Accept': 'application/json'    # Indicate that we expect a JSON response
+        'Content-Type': 'text/plain',  
+        'Accept': 'application/json'    
     }
 
-    # Make a POST request to the specified URL with the given headers and payload
     response = requests.request("POST", url, headers=headers, data=payload)
 
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
 
-    # Print the response from the server, which may contain details about the image pull operation
-    # print(response.text)
-
-    # Print the response from the server, which may contain details about the image pull operation
     try:
-        response_data = response.json()             # Parse the response as JSON
-        print(json.dumps(response_data, indent=4))  # Print formatted JSON with an indentation of 4 spaces
+        # Parse the response as JSON
+        response_data = response.json()             
+        print(json.dumps(response_data, indent=4))  
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
+        print("Response is not valid JSON:", response.text)  
 
 
-def create_container(container_name, payload):
-    """
-    Create a container using the specified container name and payload.
-
-    Args:
-        container_name (str): The name of the container to create.
-        payload (dict): A dictionary representing the container configuration.
-
-    Returns:
-        None
-    """
+def create_container(url, container_name, payload):
+    """ Create a container using the specified container name and payload. """
 
     ## Print Stage / Function
     print(" ")
     print("Stage : Creating Containers ...")
     print_line_separator()
+    print(f"LOG : Creating Container {container_name} ... ")
 
-    # Define the URL for the API endpoint to create a container
-    url = f"http://localhost:10001/containers/create?name={container_name}"
+    url = f"{url}/containers/create?name={container_name}"
 
-    # Convert the payload dictionary to a JSON string
     payload_json = json.dumps(payload)
-
-    # Set headers for the request to specify content type and accepted response type
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
 
-    # Make a POST request to the specified URL with the payload and headers
     response = requests.post(url, headers=headers, data=payload_json)
 
-    # Print the HTTP response status code
     print("Response Code:", response.status_code)
+    print(" ")
 
-    # Pretty-print the JSON response
     try:
-        response_data = response.json()             # Parse the response as JSON
-        print(json.dumps(response_data, indent=4))  # Print formatted JSON with an indentation of 4 spaces
+        # Parse the response as JSON
+        response_data = response.json()             
+        print(json.dumps(response_data, indent=4))  
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
+        print("Response is not valid JSON:", response.text)  
 
 
 # Main Function usage
 if __name__ == "__main__":
 
-    # Define the URL for the HTTP request
-    url_container = "http://localhost:10001/containers/json?all=true&external=false&size=false"
+    # Define the URL for the Podman RESTAPI 
+    url_base = "http://localhost:10001"
 
-    # Define the URL for the API endpoint For Container Images
-    url_container_image = "http://localhost:10001/images/json?all=false&digests=false"
+    # # Define the URL for the HTTP request
+    # url_container = "http://localhost:10001/containers/json?all=true&external=false&size=false"
+
+    # # Define the URL for the API endpoint For Container Images
+    # url_container_image = "http://localhost:10001/images/json?all=false&digests=false"
 
     # Define & Prepare the payload as a dictionary representing the container configuration
     # 1. Replace Image ID with image name with version ( EX : "Image" : "docker.io/library/nginx:1.24.0",) otherwise it may cause not found error 
+    # 2. Comment the "State" subsection since the container hasn't run yet (No state)
+    # 3. Replace true with True
+    # 4. Replace false with False
+    # 5. Replace null with None
+
     payload = {
             "Id": "4d6afbcf669e6342da8864190234ace265dabc5d48cf57c19823fa0072f7cc92",
             "Created": "2024-09-20T09:15:54.237931385Z",
@@ -658,28 +577,28 @@ if __name__ == "__main__":
     }
 
     # Call the function to get and print container information
-    get_list_container(url_container)
+    get_list_container(url_base)
 
     # Call the function to get and print image information
-    get_list_container_image(url_container_image)
+    get_list_container_image(url_base)
 
-    # Call the function to stop the container named "application-nginx-1.24.0"
-    stop_container("application-nginx-1.24.0", timeout=15)
+    # Call the function to stop the container based on the parameter"
+    stop_container(url_base, "application-nginx-1.24.0", timeout=15)
 
     # Call the function to delete the container
-    delete_container("application-nginx-1.24.0")
+    delete_container(url_base, "application-nginx-1.24.0")
 
     # Call the function to delete the image "nginx:1.24.0"
-    delete_container_image("nginx:1.24.0", force=False, noprune=False)
+    delete_container_image(url_base, "nginx:1.24.0", force=False, noprune=False)
 
     # Call the function to pull the image "docker.io/library/nginx:1.24.0"
-    pull_container_image("docker.io/library/nginx:1.24.0")
+    pull_container_image(url_base, "docker.io/library/nginx:1.24.0")
 
     # Call the function to create the container
-    create_container("application-nginx-1.24.0", payload)
+    create_container(url_base, "application-nginx-1.24.0", payload)
 
     # Call the function to start the container named "application-nginx-1.24.0"
-    start_container("application-nginx-1.24.0")
+    start_container(url_base, "application-nginx-1.24.0")
 
     # Call the function to get and print container information
-    get_list_container(url_container)
+    get_list_container(url_base, )
