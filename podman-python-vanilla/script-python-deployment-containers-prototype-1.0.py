@@ -58,25 +58,19 @@ def get_list_container_image(url):
     print("Stage : Listing All Container Images  ...")
     print_line_separator()
 
-    # Define any payload (data to send with the request); in this case, it's empty
-    payload = {}
+    url = f"{url}/images/json?all=false&digests=false"
 
-    # Set the request headers; we're specifying that we want a JSON response
+    payload = {}
     headers = {
         'Accept': 'application/json'
     }
 
-    # Make a GET request to the specified URL with the given headers and payload
     response = requests.request("GET", url, headers=headers, data=payload)
-
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
     
-    # Attempt to parse and pretty print the JSON response
     try:
         json_data = response.json()
-        
-        # Create a list to hold the filtered data
         filtered_data = []
         
         # Iterate through each container image in the JSON response
@@ -88,13 +82,11 @@ def get_list_container_image(url):
                 'Names': container_image.get('Names'),
                 'Containers': container_image.get('Containers')
             }
-            filtered_data.append(container_image_info)  # Append to the list
+            filtered_data.append(container_image_info) 
 
-        # Pretty print the filtered data with an indent of 4 spaces
         print(json.dumps(filtered_data, indent=4))
 
     except ValueError:
-        # Handle the case where the response is not valid JSON
         print("Response is not valid JSON.")
 
 
@@ -655,11 +647,11 @@ if __name__ == "__main__":
     # Call the function to get and print container information
     get_list_container(url_base)
 
-    # # Call the function to get and print image information
-    # get_list_container_image(url_container_image)
+    # Call the function to get and print image information
+    get_list_container_image(url_base)
 
-    # # Call the function to stop the container named "application-nginx-1.24.0"
-    # stop_container("application-nginx-1.24.0", timeout=15)
+    # Call the function to stop the container based on the parameter"
+    stop_container("application-nginx-1.24.0", timeout=15)
 
     # # Call the function to delete the container
     # delete_container("application-nginx-1.24.0")
