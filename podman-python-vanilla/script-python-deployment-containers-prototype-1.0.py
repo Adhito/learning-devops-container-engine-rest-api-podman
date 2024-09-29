@@ -273,6 +273,45 @@ def delete_container_image(image_name, force=False, noprune=False):
         print(response.text)
 
 
+
+def pull_container_image(image_reference):
+    """Pull a specified image from a container registry and print the response."""
+    
+    ## Print Stage / Function
+    print(" ")
+    print("Stage : Pulling Container Images ...")
+    print_line_separator()
+
+    # Define the URL for the API endpoint to pull the specified image
+    url = f"http://localhost:10001/v4.0.0/libpod/images/pull?reference={image_reference}"
+
+    # Define the payload for the request (placeholder; adjust as needed)
+    payload = "<file contents here>"
+
+    # Set the request headers
+    headers = {
+        'Content-Type': 'text/plain',  # Specify the content type of the request body
+        'Accept': 'application/json'    # Indicate that we expect a JSON response
+    }
+
+    # Make a POST request to the specified URL with the given headers and payload
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    # Print the response status code
+    print(f"Response Status Code: {response.status_code}")
+
+    # Print the response from the server, which may contain details about the image pull operation
+    # print(response.text)
+
+    # Print the response from the server, which may contain details about the image pull operation
+    try:
+        response_data = response.json()             # Parse the response as JSON
+        print(json.dumps(response_data, indent=4))  # Print formatted JSON with an indentation of 4 spaces
+    except json.JSONDecodeError:
+        print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
+
+
+
 # Main Function usage
 if __name__ == "__main__":
 
