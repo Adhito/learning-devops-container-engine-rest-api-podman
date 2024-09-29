@@ -97,7 +97,7 @@ def stop_container(url, container_name, timeout=15):
     print(" ")
     print(f"Stage : Stopping Container  ... ")
     print_line_separator()
-    print(f"LOG : Stopping Container {container_name} .. ")
+    print(f"LOG : Stopping Container {container_name} ... ")
 
     url = f"{url}/containers/{container_name}/stop?t={timeout}"
 
@@ -125,7 +125,7 @@ def start_container(url, container_name):
     print(" ")
     print(f"Stage : Starting Container  ... ")
     print_line_separator()
-    print(f"LOG : Starting Container {container_name} .. ")
+    print(f"LOG : Starting Container {container_name} ... ")
 
     url = f"{url}/containers/{container_name}/start"
 
@@ -147,94 +147,60 @@ def start_container(url, container_name):
         print("Response is not valid JSON:", response.text) 
 
 
-def delete_container(container_name, force=False, v=False):
-    """
-    Delete a specified container using the Docker API.
+def delete_container(url, container_name, force=False, v=False):
+    """Delete a specified container using the Docker API."""
 
-    Args:
-        container_name (str): The name of the container to delete.
-        force (bool): Whether to force the removal of the container (default is False).
-        v (bool): Whether to remove volumes associated with the container (default is False).
-
-    Returns:
-        None
-    """
     ## Print Stage / Function
     print(" ")
     print("Stage : Deleting Containers ...")
     print_line_separator()
+    print(f"LOG : Deleting Container {container_name} ... ")
 
-    # Define the URL for the API endpoint to delete the specified container
-    url = f"http://localhost:10001/containers/{container_name}?force={str(force).lower()}&v={str(v).lower()}"
+    url = f"{url}/containers/{container_name}?force={str(force).lower()}&v={str(v).lower()}"
 
-    # Payload is empty because the request does not need any body content
     payload = {}
-
-    # Set the headers for the request
     headers = {
-        'Accept': 'application/json'  # Indicate that we expect a JSON response
+        'Accept': 'application/json'
     }
 
-    # Send a DELETE request to the specified URL with the given headers and payload
     response = requests.delete(url, headers=headers, data=payload)
-
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
 
-    # # Print the response text which will contain information about the result of the delete request
-    # try:
-    #     # Parse the JSON response
-    #     data = response.json()
-    #     # Pretty-print the JSON data
-    #     pretty_json = json.dumps(data, indent=4)
-    #     print(pretty_json)
-    # except ValueError:
-    #     # If the response is not JSON, just print the raw text
-    #     print("Response is not in JSON format:")
-    #     print(response.text)
-
-    # Pretty-print the JSON response
     try:
-        response_data = response.json()             # Parse the response as JSON
-        print(json.dumps(response_data, indent=4))  # Print formatted JSON with an indentation of 4 spaces
+        # Parse the response as JSON
+        response_data = response.json()             
+        print(json.dumps(response_data, indent=4))  
     except json.JSONDecodeError:
-        print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
+        print("Response is not valid JSON:", response.text) 
 
 
-def delete_container_image(image_name, force=False, noprune=False):
+def delete_container_image(url, image_name, force=False, noprune=False):
     """Delete a specified Docker image and print the response."""
     
     ## Print Stage / Function
     print(" ")
     print("Stage : Deleting  Container Images  ...")
     print_line_separator()
+    print(f"LOG : Deleting Container Image {image_name} ... ")
 
-    # Define the URL for the API endpoint to delete the specified image
-    url = f"http://localhost:10001/images/docker.io/library/{image_name}?force={str(force).lower()}&noprune={str(noprune).lower()}"
+    url = f"{url}/images/docker.io/library/{image_name}?force={str(force).lower()}&noprune={str(noprune).lower()}"
 
-    # Payload is empty because the request does not need any body content
     payload = {}
-
-    # Set the headers for the request
     headers = {
-        'Accept': 'application/json'  # Indicate that we expect a JSON response
+        'Accept': 'application/json'  
     }
 
-    # Send a DELETE request to the specified URL with the given headers and payload
     response = requests.request("DELETE", url, headers=headers, data=payload)
-
-    # Print the response status code
     print(f"Response Status Code: {response.status_code}")
+    print(" ")
 
-    # Print the response text which will contain information about the result of the delete request
     try:
         # Parse the JSON response
         data = response.json()
-        # Pretty-print the JSON data
         pretty_json = json.dumps(data, indent=4)
         print(pretty_json)
     except ValueError:
-        # If the response is not JSON, just print the raw text
         print("Response is not in JSON format:")
         print(response.text)
 
