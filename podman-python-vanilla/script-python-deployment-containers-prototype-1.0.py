@@ -105,6 +105,7 @@ def get_list_container_image(url):
         # Handle the case where the response is not valid JSON
         print("Response is not valid JSON.")
 
+
 def stop_container(container_name, timeout=15):
     """Stop a specified container and print the response."""
     
@@ -273,7 +274,6 @@ def delete_container_image(image_name, force=False, noprune=False):
         print(response.text)
 
 
-
 def pull_container_image(image_reference):
     """Pull a specified image from a container registry and print the response."""
     
@@ -352,7 +352,6 @@ def create_container(container_name, payload):
         print(json.dumps(response_data, indent=4))  # Print formatted JSON with an indentation of 4 spaces
     except json.JSONDecodeError:
         print("Response is not valid JSON:", response.text)  # Handle cases where response is not JSON
-
 
 
 # Main Function usage
@@ -664,3 +663,23 @@ if __name__ == "__main__":
     # Call the function to get and print image information
     get_list_container_image(url_container_image)
 
+    # Call the function to stop the container named "application-nginx-1.24.0"
+    stop_container("application-nginx-1.24.0", timeout=15)
+
+    # Call the function to delete the container
+    delete_container("application-nginx-1.24.0")
+
+    # Call the function to delete the image "nginx:1.24.0"
+    delete_container_image("nginx:1.24.0", force=False, noprune=False)
+
+    # Call the function to pull the image "docker.io/library/nginx:1.24.0"
+    pull_container_image("docker.io/library/nginx:1.24.0")
+
+    # Call the function to create the container
+    create_container("application-nginx-1.24.0", payload)
+
+    # Call the function to start the container named "application-nginx-1.24.0"
+    start_container("application-nginx-1.24.0")
+
+    # Call the function to get and print container information
+    get_list_container(url_container)
